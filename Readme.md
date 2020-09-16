@@ -1,7 +1,7 @@
 # Учебный проект «Код и Магия» [![Build status][travis-image]][travis-url]
 
 * Студент: [Виктория Борисова](https://up.htmlacademy.ru/javascript/21/user/104923).
-* Наставник: `Неизвестно`.
+* * Наставник: [Илья Бердюгин](https://up.htmlacademy.ru/javascript/21/user/386161).
 
 ---
 
