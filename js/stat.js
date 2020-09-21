@@ -48,33 +48,41 @@ window.renderStatistics = (ctx, names, times) => {
   let maxTime = getMaxElement(times);
 
   for (let i = 0; i < names.length; i++) {
-    ctx.fillText(
-        names[i],
-        CLOUD_X * (i + 1) + GAP,
-        TEXT_BOTTOM_PADDING
-    );
+    let drawBar = (userNumber, userName, userTime) => {
+      if (userName === `Вы`) {
+        ctx.fillStyle = MAIN_RED;
+      } else {
+        ctx.fillStyle = MAIN_BLUE;
+        ctx.globalAlpha = 1 / (userTime / maxTime + userNumber);
+      }
+      ctx.fillRect(
+          CLOUD_X * (userNumber + 1) + GAP,
+          BAR_BOTTOM_PADDING,
+          BAR_WIDTH,
+          BAR_HEIGHT * userTime / maxTime
+      );
+    };
 
-    if (names[i] === `Вы`) {
-      ctx.fillStyle = MAIN_RED;
-    } else {
-      ctx.fillStyle = MAIN_BLUE;
-      ctx.globalAlpha = 1 / (times[i] / maxTime + i);
-    }
+    let writeText = (userNumber, userName, userTime) => {
+      const TEXT_X = CLOUD_X * (userNumber + 1) + GAP;
 
-    ctx.fillRect(
-        CLOUD_X * (i + 1) + GAP,
-        BAR_BOTTOM_PADDING,
-        BAR_WIDTH,
-        BAR_HEIGHT * times[i] / maxTime
-    );
+      ctx.fillStyle = MAIN_BLACK;
+      ctx.globalAlpha = 1;
 
-    ctx.fillStyle = MAIN_BLACK;
-    ctx.globalAlpha = 1;
+      ctx.fillText(
+          userName,
+          TEXT_X,
+          TEXT_BOTTOM_PADDING
+      );
 
-    ctx.fillText(
-        Math.round(times[i]),
-        CLOUD_X * (i + 1) + GAP,
-        BAR_HEIGHT * times[i] / maxTime + TEXT_BOTTOM_PADDING - 30
-    );
+      ctx.fillText(
+          Math.round(userTime),
+          TEXT_X,
+          BAR_HEIGHT * userTime / maxTime + TEXT_BOTTOM_PADDING - 30
+      );
+    };
+
+    drawBar(i, names[i], times[i]);
+    writeText(i, names[i], times[i]);
   }
 };
