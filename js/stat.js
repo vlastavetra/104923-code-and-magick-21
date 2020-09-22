@@ -16,6 +16,41 @@ const BAR_WIDTH = 40;
 const BAR_HEIGHT = -150;
 const GAP = 40;
 
+
+let drawBar = (ctx, userNumber, userName, userTime, currentMaxTime) => {
+  if (userName === `Вы`) {
+    ctx.fillStyle = MAIN_RED;
+  } else {
+    ctx.fillStyle = MAIN_BLUE;
+    ctx.globalAlpha = 1 / (userTime / currentMaxTime + userNumber);
+  }
+  ctx.fillRect(
+      CLOUD_X * (userNumber + 1) + GAP,
+      BAR_BOTTOM_PADDING,
+      BAR_WIDTH,
+      BAR_HEIGHT * userTime / currentMaxTime
+  );
+};
+
+let writeText = (ctx, userNumber, userName, userTime, currentMaxTime) => {
+  const TEXT_X = CLOUD_X * (userNumber + 1) + GAP;
+
+  ctx.fillStyle = MAIN_BLACK;
+  ctx.globalAlpha = 1;
+
+  ctx.fillText(
+      userName,
+      TEXT_X,
+      TEXT_BOTTOM_PADDING
+  );
+
+  ctx.fillText(
+      Math.round(userTime),
+      TEXT_X,
+      BAR_HEIGHT * userTime / currentMaxTime + TEXT_BOTTOM_PADDING - 30
+  );
+};
+
 let renderCloud = (ctx, x, y, color) => {
   ctx.fillStyle = color;
   ctx.fillRect(x, y, CLOUD_WIDTH, CLOUD_HEIGHT);
@@ -45,44 +80,8 @@ window.renderStatistics = (ctx, names, times) => {
   ctx.fillText(`Ура вы победили!`, TOP_TEXT_X, CLOUD_Y + 20);
   ctx.fillText(`Список результатов:`, TOP_TEXT_X, CLOUD_Y + GAP);
 
-  let maxTime = getMaxElement(times);
-
   for (let i = 0; i < names.length; i++) {
-    let drawBar = (userNumber, userName, userTime) => {
-      if (userName === `Вы`) {
-        ctx.fillStyle = MAIN_RED;
-      } else {
-        ctx.fillStyle = MAIN_BLUE;
-        ctx.globalAlpha = 1 / (userTime / maxTime + userNumber);
-      }
-      ctx.fillRect(
-          CLOUD_X * (userNumber + 1) + GAP,
-          BAR_BOTTOM_PADDING,
-          BAR_WIDTH,
-          BAR_HEIGHT * userTime / maxTime
-      );
-    };
-
-    let writeText = (userNumber, userName, userTime) => {
-      const TEXT_X = CLOUD_X * (userNumber + 1) + GAP;
-
-      ctx.fillStyle = MAIN_BLACK;
-      ctx.globalAlpha = 1;
-
-      ctx.fillText(
-          userName,
-          TEXT_X,
-          TEXT_BOTTOM_PADDING
-      );
-
-      ctx.fillText(
-          Math.round(userTime),
-          TEXT_X,
-          BAR_HEIGHT * userTime / maxTime + TEXT_BOTTOM_PADDING - 30
-      );
-    };
-
-    drawBar(i, names[i], times[i]);
-    writeText(i, names[i], times[i]);
+    drawBar(ctx, i, names[i], times[i], getMaxElement(times));
+    writeText(ctx, i, names[i], times[i], getMaxElement(times));
   }
 };
