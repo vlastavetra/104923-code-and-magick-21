@@ -1,28 +1,75 @@
 'use strict';
 
 const USER_DIALOG_CN = `.setup`;
+const USER_DIALOG_OPEN = document.querySelector(`.setup-open`);
+const USER_DIALOG_CLOSE = document.querySelector(`.setup-close`);
+const USER_NAME_INPUT = document.querySelector(`.setup-user-name`);
 const USER_SIMILAR_CN = `.setup-similar`;
 const SIMILAR_LIST_ELEMENT = document.querySelector(`.setup-similar-list`);
 const SIMILAR_WIZARD_TEMPLATE = document.querySelector(`#similar-wizard-template`)
     .content
     .querySelector(`.setup-similar-item`);
+const FRAGMENT = document.createDocumentFragment();
+const WIZARD_COAT = document.querySelector(`.setup-wizard .wizard-coat`);
+const WIZARD_EYES = document.querySelector(`.setup-wizard .wizard-eyes`);
+const WIZARD_FIREBALL = document.querySelector(`.setup-fireball-wrap`);
+const WIZARD_COAT_INPUT = document.querySelector(`input[name="coat-color"]`);
+const WIZARD_EYES_INPUT = document.querySelector(`input[name="eyes-color"]`);
+const WIZARD_FIREBALL_INPUT = document.querySelector(`input[name="fireball-color"]`);
+
 const WIZARD_FIRST_NAME = [`Иван`, `Хуан Себастьян`, `Мария`, `Кристоф`, `Виктор`, `Юлия`, `Люпита`, `Вашингтон`];
 const WIZARD_LAST_NAME = [`да Марья`, `Верон`, `Мирабелла`, `Вальц`, `Онопко`, `Топольницкая`, `Нионго`, `Ирвинг`];
 const WIZARD_COAT_COLOR = [`rgb(101, 137, 164)`, `rgb(241, 43, 107)`, `rgb(146, 100, 161)`, `rgb(56, 159, 117)`, `rgb(215, 210, 55)`, `rgb(0, 0, 0)`];
 const WIZARD_EYES_COLOR = [`black`, `red`, `blue`, `yellow`, `green`];
-const FRAGMENT = document.createDocumentFragment();
+const WIZARD_FIREBALL_COLOR = [`#ee4830`, `#30a8ee`, `#5ce6c0`, `#e848d5`, `#e6e848`];
+
 const WIZARDS_NUMBER = 4;
+const MIN_NAME_LENGTH = 2;
+const MAX_NAME_LENGTH = 25;
 
 let getRandomElement = (arr) => {
   return arr[Math.round(Math.random() * Math.round(arr.length - 1))];
 };
 
-let removeClass = (element, className) => {
-  element.querySelector(className).classList.remove(`hidden`);
+let onPopupEscPress = (evt) => {
+  if (evt.key === `Escape` && USER_NAME_INPUT.onfocus === false) {
+    evt.preventDefault();
+    addClass(document, USER_DIALOG_CN);
+  }
 };
 
-removeClass(document, USER_DIALOG_CN);
-removeClass(document, USER_SIMILAR_CN);
+let removeClass = (element, className) => {
+  element.querySelector(className).classList.remove(`hidden`);
+
+  element.addEventListener(`keydown`, onPopupEscPress);
+};
+
+let addClass = (element, className) => {
+  element.querySelector(className).classList.add(`hidden`);
+
+  element.addEventListener(`keydown`, onPopupEscPress);
+};
+
+USER_DIALOG_OPEN.addEventListener(`click`, () => {
+  removeClass(document, USER_DIALOG_CN);
+  removeClass(document, USER_SIMILAR_CN);
+});
+
+USER_DIALOG_OPEN.addEventListener(`keydown`, (evt) => {
+  if (evt.key === `Enter`) {
+    removeClass(document, USER_DIALOG_CN);
+  }
+});
+
+USER_DIALOG_CLOSE.addEventListener(`click`, () => {
+  addClass(document, USER_DIALOG_CN);
+});
+
+USER_DIALOG_CLOSE.addEventListener(`keydown`, (evt) => {
+  if (evt.key === `Enter`) {
+    addClass(document, USER_DIALOG_CN);
+  }
+});
 
 let renderWisardsList = (number) => {
   let wizard = [];
@@ -54,3 +101,32 @@ for (let i = 0; i < wizardsList.length; i++) {
 }
 
 SIMILAR_LIST_ELEMENT.appendChild(FRAGMENT);
+
+WIZARD_COAT.addEventListener(`click`, () => {
+  WIZARD_COAT.style.fill = getRandomElement(WIZARD_COAT_COLOR);
+  WIZARD_COAT_INPUT.value = WIZARD_COAT.style.fill;
+});
+
+WIZARD_EYES.addEventListener(`click`, () => {
+  WIZARD_EYES.style.fill = getRandomElement(WIZARD_EYES_COLOR);
+  WIZARD_EYES_INPUT.value = WIZARD_EYES.style.fill;
+});
+
+WIZARD_FIREBALL.addEventListener(`click`, () => {
+  WIZARD_FIREBALL.style.background = getRandomElement(WIZARD_FIREBALL_COLOR);
+  WIZARD_FIREBALL_INPUT.value = WIZARD_FIREBALL.style.background;
+});
+
+USER_NAME_INPUT.addEventListener(`input`, () => {
+  let valueLength = USER_NAME_INPUT.value.length;
+
+  if (valueLength < MIN_NAME_LENGTH) {
+    USER_NAME_INPUT.setCustomValidity(`Ещё ` + (MIN_NAME_LENGTH - valueLength) + ` симв.`);
+  } else if (valueLength > MAX_NAME_LENGTH) {
+    USER_NAME_INPUT.setCustomValidity(`Удалите лишние ` + (valueLength - MAX_NAME_LENGTH) + ` симв.`);
+  } else {
+    USER_NAME_INPUT.setCustomValidity(``);
+  }
+
+  USER_NAME_INPUT.reportValidity();
+});
