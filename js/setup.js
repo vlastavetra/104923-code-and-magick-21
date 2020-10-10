@@ -32,42 +32,42 @@ let getRandomElement = (arr) => {
 };
 
 let onPopupEscPress = (evt) => {
-  if (evt.key === `Escape` && USER_NAME_INPUT.onfocus === false) {
+  if (evt.key === `Escape` && document.activeElement !== USER_NAME_INPUT) {
     evt.preventDefault();
-    addClass(document, USER_DIALOG_CN);
+    hideElement(document, USER_DIALOG_CN);
   }
 };
 
-let removeClass = (element, className) => {
-  element.querySelector(className).classList.remove(`hidden`);
+let showElement = (searchLevel, elementClassName) => {
+  searchLevel.querySelector(elementClassName).classList.remove(`hidden`);
 
-  element.addEventListener(`keydown`, onPopupEscPress);
+  searchLevel.addEventListener(`keydown`, onPopupEscPress);
 };
 
-let addClass = (element, className) => {
-  element.querySelector(className).classList.add(`hidden`);
+let hideElement = (searchLevel, elementClassName) => {
+  searchLevel.querySelector(elementClassName).classList.add(`hidden`);
 
-  element.addEventListener(`keydown`, onPopupEscPress);
+  searchLevel.addEventListener(`keydown`, onPopupEscPress);
 };
 
 USER_DIALOG_OPEN.addEventListener(`click`, () => {
-  removeClass(document, USER_DIALOG_CN);
-  removeClass(document, USER_SIMILAR_CN);
+  showElement(document, USER_DIALOG_CN);
+  showElement(document, USER_SIMILAR_CN);
 });
 
 USER_DIALOG_OPEN.addEventListener(`keydown`, (evt) => {
   if (evt.key === `Enter`) {
-    removeClass(document, USER_DIALOG_CN);
+    showElement(document, USER_DIALOG_CN);
   }
 });
 
 USER_DIALOG_CLOSE.addEventListener(`click`, () => {
-  addClass(document, USER_DIALOG_CN);
+  hideElement(document, USER_DIALOG_CN);
 });
 
 USER_DIALOG_CLOSE.addEventListener(`keydown`, (evt) => {
   if (evt.key === `Enter`) {
-    addClass(document, USER_DIALOG_CN);
+    hideElement(document, USER_DIALOG_CN);
   }
 });
 
@@ -113,8 +113,10 @@ WIZARD_EYES.addEventListener(`click`, () => {
 });
 
 WIZARD_FIREBALL.addEventListener(`click`, () => {
-  WIZARD_FIREBALL.style.background = getRandomElement(WIZARD_FIREBALL_COLOR);
-  WIZARD_FIREBALL_INPUT.value = WIZARD_FIREBALL.style.background;
+  let newFireballColor = getRandomElement(WIZARD_FIREBALL_COLOR);
+
+  WIZARD_FIREBALL.style.background = newFireballColor;
+  WIZARD_FIREBALL_INPUT.value = newFireballColor;
 });
 
 USER_NAME_INPUT.addEventListener(`input`, () => {
