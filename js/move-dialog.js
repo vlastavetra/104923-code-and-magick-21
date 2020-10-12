@@ -7,7 +7,7 @@
   DIALOG_HANDLE.addEventListener(`mousedown`, function (evt) {
     evt.preventDefault();
 
-    const START_COORDS = {
+    let START_COORDS = {
       x: evt.clientX,
       y: evt.clientY
     };
