@@ -3,19 +3,24 @@
 (() => {
   window.util = {
     getRandomNumber(num) {
-      return (Math.round(Math.random() * num));
+      return (Math.floor(Math.random() * num));
     },
 
     getRandomElement(arr) {
-      return arr[Math.round(Math.random() * Math.round(arr.length - 1))];
+      return arr[Math.floor(Math.random() * Math.round(arr.length - 1))];
     },
 
-    getRandomArray(arr) {
-      let newArray = [];
+    getRandomArray(num, arr) {
+      let randomArr = [];
 
-      newArray = arr.slice(window.util.getRandomNumber(arr.length - 1));
+      for (let i = 0; i < num; i++) {
+        let newIndex = window.util.getRandomNumber(arr.length - 1);
 
-      return newArray;
+        randomArr.push(arr[newIndex]);
+        arr.splice(newIndex, 1);
+      }
+
+      return randomArr;
     },
 
     showElement(element, tumbler) {
@@ -29,5 +34,7 @@
 
       document.addEventListener(`keydown`, window.dialog.onPopupEscPress);
     },
+
+    noop() {},
   };
 })();

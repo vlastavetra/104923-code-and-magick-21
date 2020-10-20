@@ -31,9 +31,9 @@
     }
   });
 
-  USER_DIALOG_FORM.addEventListener(`submit`, function (evt) {
+  USER_DIALOG_FORM.addEventListener(`submit`, (evt) => {
     evt.preventDefault();
-    window.backend.save(new FormData(USER_DIALOG_FORM), function () {
+    window.backend.save(new FormData(USER_DIALOG_FORM), () => {
       window.util.hideElement(USER_DIALOG_CN, USER_DIALOG_TUMBLER);
     });
   });

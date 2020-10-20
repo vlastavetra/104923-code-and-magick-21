@@ -1,8 +1,8 @@
 'use strict';
 
 (() => {
-  const URL_GET = `https://21.javascript.pages.academy/code-and-magick`;
-  const URL_POST = `https://21.javascript.pages.academy/code-and-magick/data`;
+  const URL_POST = `https://21.javascript.pages.academy/code-and-magick`;
+  const URL_GET = `https://21.javascript.pages.academy/code-and-magick/data`;
   const StatusCode = {
     OK: 200
   };
@@ -26,24 +26,26 @@
     });
   };
 
+  let makeRequest = (xhr, method, url) => {
+    xhr.responseType = `json`;
+    xhr.open(method, url);
+    xhr.timeout = TIMEOUT_IN_MS;
+  };
+
   window.backend = {
-    load(onLoad, onError) {
+    load(onLoad, onError = window.util.noop) {
       let xhr = new XMLHttpRequest();
 
-      xhr.responseType = `json`;
-      xhr.open(`GET`, URL_POST);
-      xhr.timeout = TIMEOUT_IN_MS;
+      makeRequest(xhr, `GET`, URL_GET);
 
       statusHandler(xhr, onLoad, onError);
       xhr.send();
     },
 
-    save(data, onLoad, onError) {
+    save(data, onLoad, onError = window.util.noop) {
       let xhr = new XMLHttpRequest();
 
-      xhr.responseType = `json`;
-      xhr.open(`POST`, URL_GET);
-      xhr.timeout = TIMEOUT_IN_MS;
+      makeRequest(xhr, `POST`, URL_POST);
 
       statusHandler(xhr, onLoad, onError);
       xhr.send(data);

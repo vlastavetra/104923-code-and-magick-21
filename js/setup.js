@@ -31,7 +31,7 @@
   };
 
   const successHandler = (wizards) => {
-    let wizardArr = window.util.getRandomArray(wizards);
+    let wizardArr = window.util.getRandomArray(WIZARDS_NUMBER, wizards);
 
     if (wizardArr.length >= WIZARDS_NUMBER) {
       for (let i = 0; i < WIZARDS_NUMBER; i++) {
@@ -47,15 +47,16 @@
     window.util.showElement(USER_SIMILAR_CN, USER_DIALOG_TUMBLER);
   };
 
-  const errorHandler = function (errorMessage) {
+  const errorHandler = (errorMessage) => {
     const node = document.createElement(`div`);
+
     node.style = `z-index: 100; margin: 0 auto; text-align: center; background-color: red;`;
     node.style.position = `absolute`;
     node.style.left = 0;
     node.style.right = 0;
     node.style.fontSize = `30px`;
-
     node.textContent = errorMessage;
+
     document.body.insertAdjacentElement(`afterbegin`, node);
   };
 
