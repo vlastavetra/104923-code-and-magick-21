@@ -17,38 +17,34 @@
       }
     });
 
-    xhr.addEventListener(`error`, function () {
+    xhr.addEventListener(`error`, () => {
       onError(`Произошла ошибка соединения`);
     });
 
-    xhr.addEventListener(`timeout`, function () {
+    xhr.addEventListener(`timeout`, () => {
       onError(`Запрос не успел выполниться за ` + xhr.timeout + `мс`);
     });
   };
 
-  let makeRequest = (xhr, method, url) => {
+  let makeRequest = (method, url, onLoad, onError = window.util.noop) => {
+    let xhr = new XMLHttpRequest();
+
     xhr.responseType = `json`;
     xhr.open(method, url);
     xhr.timeout = TIMEOUT_IN_MS;
+
+    statusHandler(xhr, onLoad, onError);
+
+    return xhr;
   };
 
   window.backend = {
-    load(onLoad, onError = window.util.noop) {
-      let xhr = new XMLHttpRequest();
-
-      makeRequest(xhr, `GET`, URL_GET);
-
-      statusHandler(xhr, onLoad, onError);
-      xhr.send();
+    load(onLoad, onError) {
+      makeRequest(`GET`, URL_GET, onLoad, onError).send();
     },
 
-    save(data, onLoad, onError = window.util.noop) {
-      let xhr = new XMLHttpRequest();
-
-      makeRequest(xhr, `POST`, URL_POST);
-
-      statusHandler(xhr, onLoad, onError);
-      xhr.send(data);
+    save(data, onLoad, onError) {
+      makeRequest(`POST`, URL_POST, onLoad, onError).send(data);
     },
   };
 })();
