@@ -8,7 +8,7 @@
   const USER_DIALOG_TUMBLER = `hidden`;
   const USER_SIMILAR_CN = document.querySelector(`.setup-similar`);
   const USER_NAME_INPUT = document.querySelector(`.setup-user-name`);
-  const DIALOG_HANDLE = USER_DIALOG_CN.querySelector(`.upload`);
+  const USER_DIALOG_FORM = USER_DIALOG_CN.querySelector(`.setup-wizard-form`);
 
   USER_DIALOG_OPEN.addEventListener(`click`, () => {
     window.util.showElement(USER_DIALOG_CN, USER_DIALOG_TUMBLER);
@@ -31,6 +31,13 @@
     }
   });
 
+  USER_DIALOG_FORM.addEventListener(`submit`, (evt) => {
+    evt.preventDefault();
+    window.backend.save(new FormData(USER_DIALOG_FORM), () => {
+      window.util.hideElement(USER_DIALOG_CN, USER_DIALOG_TUMBLER);
+    });
+  });
+
   window.dialog = {
     onPopupEscPress(evt) {
       if (evt.key === `Escape` && document.activeElement !== USER_NAME_INPUT) {
@@ -39,40 +46,4 @@
       }
     }
   };
-
-  DIALOG_HANDLE.addEventListener(`mousedown`, function (evt) {
-    evt.preventDefault();
-
-    let startCoords = {
-      x: evt.clientX,
-      y: evt.clientY
-    };
-
-    let onMouseMove = function (moveEvt) {
-      moveEvt.preventDefault();
-
-      let shift = {
-        x: startCoords.x - moveEvt.clientX,
-        y: startCoords.y - moveEvt.clientY
-      };
-
-      startCoords = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
-
-      USER_DIALOG_CN.style.top = (USER_DIALOG_CN.offsetTop - shift.y) + `px`;
-      USER_DIALOG_CN.style.left = (USER_DIALOG_CN.offsetLeft - shift.x) + `px`;
-    };
-
-    let onMouseUp = function (upEvt) {
-      upEvt.preventDefault();
-
-      document.removeEventListener(`mousemove`, onMouseMove);
-      document.removeEventListener(`mouseup`, onMouseUp);
-    };
-
-    document.addEventListener(`mousemove`, onMouseMove);
-    document.addEventListener(`mouseup`, onMouseUp);
-  });
 })();
