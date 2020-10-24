@@ -1,7 +1,6 @@
 'use strict';
 
 (() => {
-
   const USER_DIALOG_CN = document.querySelector(`.setup`);
   const USER_DIALOG_OPEN = document.querySelector(`.setup-open`);
   const USER_DIALOG_CLOSE = document.querySelector(`.setup-close`);
