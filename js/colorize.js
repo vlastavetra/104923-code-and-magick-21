@@ -8,9 +8,9 @@
   };
 
   let wizard = {
-    onCoatChange: () => {},
-    onEyesChange: () => {},
-    onFireballChange: () => {}
+    onCoatChange: window.util.noop(),
+    onEyesChange: window.util.noop(),
+    onFireballChange: window.util.noop()
   };
 
   let changeColor = (element, newColor) => {

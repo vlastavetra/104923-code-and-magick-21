@@ -2,8 +2,8 @@
 (() => {
   const DEBOUNCE_INTERVAL = 500;
 
-  window.debounce = function (cb) {
-    const lastTimeout = null;
+  window.debounce = (cb) => {
+    let lastTimeout = null;
 
     return (...parameters) => {
       if (lastTimeout) {

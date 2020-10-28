@@ -4,7 +4,7 @@
   const USER_DIALOG_CN = document.querySelector(`.setup`);
   const DIALOG_HANDLE = USER_DIALOG_CN.querySelector(`.upload`);
 
-  DIALOG_HANDLE.addEventListener(`mousedown`, function (evt) {
+  DIALOG_HANDLE.addEventListener(`mousedown`, (evt) => {
     evt.preventDefault();
 
     let START_COORDS = {
@@ -14,7 +14,7 @@
 
     let dragged = false;
 
-    let onMouseMove = function (moveEvt) {
+    let onMouseMove = (moveEvt) => {
       moveEvt.preventDefault();
 
       dragged = true;
@@ -33,14 +33,14 @@
       USER_DIALOG_CN.style.left = (USER_DIALOG_CN.offsetLeft - shift.x) + `px`;
     };
 
-    let onMouseUp = function (upEvt) {
+    let onMouseUp = (upEvt) => {
       upEvt.preventDefault();
 
       document.removeEventListener(`mousemove`, onMouseMove);
       document.removeEventListener(`mouseup`, onMouseUp);
 
       if (dragged) {
-        let onClickPreventDefault = function (clickEvt) {
+        let onClickPreventDefault = (clickEvt) => {
           clickEvt.preventDefault();
           DIALOG_HANDLE.removeEventListener(`click`, onClickPreventDefault);
         };

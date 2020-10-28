@@ -55,7 +55,7 @@
   window.backend.load(successHandler, errorHandler);
 
   let updateWizards = () => {
-    window.render.renderList(wizards.sort(function (left, right) {
+    window.render.renderList(wizards.sort((left, right) => {
       let rankDiff = getRank(right) - getRank(left);
       if (rankDiff === 0) {
         rankDiff = compareNames(left.name, right.name);
@@ -64,20 +64,22 @@
     }));
   };
 
-  window.debounce(window.colorize.setCoatChangeHandler((color) => {
+  let updateWizardsWithDebounce = window.debounce(updateWizards);
+
+  window.colorize.setCoatChangeHandler((color) => {
     coatColor = color;
-    updateWizards();
-  }));
+    updateWizardsWithDebounce();
+  });
 
-  window.debounce(window.colorize.setEyesChangeHandler((color) => {
+  window.colorize.setEyesChangeHandler((color) => {
     eyesColor = color;
-    updateWizards();
-  }));
+    updateWizardsWithDebounce();
+  });
 
-  window.debounce(window.colorize.setFireballChangeHandler((color) => {
+  window.colorize.setFireballChangeHandler((color) => {
     fireballColor = color;
-    updateWizards();
-  }));
+    updateWizardsWithDebounce();
+  });
 
   window.colorize.colorizeElement(WIZARD_COAT, WIZARD_COAT_INPUT, WIZARD_COAT_COLOR);
   window.colorize.colorizeElement(WIZARD_EYES, WIZARD_EYES_INPUT, WIZARD_EYES_COLOR);
