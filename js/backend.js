@@ -1,8 +1,14 @@
 'use strict';
 
 (() => {
-  const URL_POST = `https://21.javascript.pages.academy/code-and-magick`;
-  const URL_GET = `https://21.javascript.pages.academy/code-and-magick/data`;
+  const RequestURL = {
+    GET: `https://21.javascript.pages.academy/code-and-magick/data`,
+    POST: `https://21.javascript.pages.academy/keksobooking/`
+  };
+  const RequestMethod = {
+    GET: `GET`,
+    POST: `POST`
+  };
   const StatusCode = {
     OK: 200
   };
@@ -40,11 +46,11 @@
 
   window.backend = {
     load(onLoad, onError) {
-      makeRequest(`GET`, URL_GET, onLoad, onError).send();
+      makeRequest(RequestMethod.GET, RequestURL.GET, onLoad, onError).send();
     },
 
     save(data, onLoad, onError) {
-      makeRequest(`POST`, URL_POST, onLoad, onError).send(data);
+      makeRequest(RequestMethod.POST, RequestURL.POST, onLoad, onError).send(data);
     },
   };
 })();
