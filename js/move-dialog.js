@@ -1,55 +1,53 @@
 'use strict';
 
-(() => {
-  const USER_DIALOG_CN = document.querySelector(`.setup`);
-  const DIALOG_HANDLE = USER_DIALOG_CN.querySelector(`.upload`);
+const USER_DIALOG_CN = document.querySelector(`.setup`);
+const DIALOG_HANDLE = USER_DIALOG_CN.querySelector(`.upload`);
 
-  DIALOG_HANDLE.addEventListener(`mousedown`, (evt) => {
-    evt.preventDefault();
+DIALOG_HANDLE.addEventListener(`mousedown`, (evt) => {
+  evt.preventDefault();
 
-    let START_COORDS = {
-      x: evt.clientX,
-      y: evt.clientY
+  let START_COORDS = {
+    x: evt.clientX,
+    y: evt.clientY
+  };
+
+  let dragged = false;
+
+  let onMouseMove = (moveEvt) => {
+    moveEvt.preventDefault();
+
+    dragged = true;
+
+    let shift = {
+      x: START_COORDS.x - moveEvt.clientX,
+      y: START_COORDS.y - moveEvt.clientY
     };
 
-    let dragged = false;
+    START_COORDS = {
+      x: moveEvt.clientX,
+      y: moveEvt.clientY
+    };
 
-    let onMouseMove = (moveEvt) => {
-      moveEvt.preventDefault();
+    USER_DIALOG_CN.style.top = (USER_DIALOG_CN.offsetTop - shift.y) + `px`;
+    USER_DIALOG_CN.style.left = (USER_DIALOG_CN.offsetLeft - shift.x) + `px`;
+  };
 
-      dragged = true;
+  let onMouseUp = (upEvt) => {
+    upEvt.preventDefault();
 
-      let shift = {
-        x: START_COORDS.x - moveEvt.clientX,
-        y: START_COORDS.y - moveEvt.clientY
+    document.removeEventListener(`mousemove`, onMouseMove);
+    document.removeEventListener(`mouseup`, onMouseUp);
+
+    if (dragged) {
+      let onClickPreventDefault = (clickEvt) => {
+        clickEvt.preventDefault();
+        DIALOG_HANDLE.removeEventListener(`click`, onClickPreventDefault);
       };
 
-      START_COORDS = {
-        x: moveEvt.clientX,
-        y: moveEvt.clientY
-      };
+      DIALOG_HANDLE.addEventListener(`click`, onClickPreventDefault);
+    }
+  };
 
-      USER_DIALOG_CN.style.top = (USER_DIALOG_CN.offsetTop - shift.y) + `px`;
-      USER_DIALOG_CN.style.left = (USER_DIALOG_CN.offsetLeft - shift.x) + `px`;
-    };
-
-    let onMouseUp = (upEvt) => {
-      upEvt.preventDefault();
-
-      document.removeEventListener(`mousemove`, onMouseMove);
-      document.removeEventListener(`mouseup`, onMouseUp);
-
-      if (dragged) {
-        let onClickPreventDefault = (clickEvt) => {
-          clickEvt.preventDefault();
-          DIALOG_HANDLE.removeEventListener(`click`, onClickPreventDefault);
-        };
-
-        DIALOG_HANDLE.addEventListener(`click`, onClickPreventDefault);
-      }
-    };
-
-    document.addEventListener(`mousemove`, onMouseMove);
-    document.addEventListener(`mouseup`, onMouseUp);
-  });
-})();
+  document.addEventListener(`mousemove`, onMouseMove);
+  document.addEventListener(`mouseup`, onMouseUp);
+});
